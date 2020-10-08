@@ -3,9 +3,6 @@
 #Storage Admin over specfic Bucket
 
 #gcloud beta sql import bak sql1 gs://dba-freenas/SUSWEYAK15_EvoDb_Testing_FULL_20200325_011850.bak --database=EvoDb_Testing
-import dbconn
-from dbconn import *
-
 import argparse
 import os
 import time
@@ -59,8 +56,7 @@ def list_sql_instances(cloudsql,projectname,sqlinstance_name):
 def destroy_sqlinstance(cloudsql, projectname,sqlinstance_name):
 	return cloudsql.instances().delete(project=projectname,instance=sqlinstance_name).execute()
 # [END destroy_sqlinstance]
-
-#destroy_sqlinstances("ti-is-devenv-01","sql1")
+# destroy_sqlinstances(cloudsql,"ti-is-devenv-01","sql1")
 
 
 # [START wait_for_operation]
@@ -78,7 +74,8 @@ def wait_for_operation(cloudsql, project, operation):
             return result
         time.sleep(1)
 # [END wait_for_operation]
-#wait_for_operation(cloudsql, "ti-is-devenv-01", operation)
+# wait_for_operation(cloudsql, "ti-is-devenv-01", operation)
+
 
 # [START get_random_string]
 def get_random_string(length):
@@ -86,12 +83,16 @@ def get_random_string(length):
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
 # [END get_random_string]
+# get_random_string(6)
+
 
 # [START generate_random_name]
 def generate_random_name(sqlinstance_name,length):
 	sqlinstance_name = sqlinstance_name + "-" + get_random_string(length)
 	return sqlinstance_name
 # [END generate_random_name]
+# generate_random_name("prefix",6)
+
 
 # [START create_instance]
 def create_sqlinstance(cloudsql, project, zone, sqlinstance_name, machine_type, ssd_size, sqlversion, saPasswd):
@@ -127,7 +128,7 @@ def create_sqlinstance(cloudsql, project, zone, sqlinstance_name, machine_type, 
         project=project,
         body=config).execute()
 # [END create_instance]
-#create_sqlinstance(cloudsql,"ti-is-devenv-01","us-west1-a",generate_random_name(5),"db-custom-4-15360",100,'SQLSERVER_2017_WEB',"Pass12345")
+# create_sqlinstance(cloudsql,"ti-is-devenv-01","us-west1-a",generate_random_name(5),"db-custom-4-15360",100,'SQLSERVER_2017_WEB',"Pass12345")
 
 
 # [START import_instance]
@@ -145,7 +146,7 @@ def import_sqlinstance(cloudsql, project, sqlinstance_name,database_name,filetyp
     	instance=sqlinstance_name,
     	body=config).execute()
 # [END import_instance]
-#import_sqlinstance(cloudsql,"ti-is-devenv-01","us-west1-a",instances['targetID'],'EvoDb_Testing','BAK')
+# import_sqlinstance(cloudsql,"ti-is-devenv-01","us-west1-a",instances['targetID'],'EvoDb_Testing','BAK')
 
 
 # [START run]
@@ -206,13 +207,6 @@ if __name__ == '__main__':
     main(args.project_id, args.bucket_name, args.zone, args.name)
 # [END run]
 #python sqlinstance.py --name sqlrestore --zone us-west1-a ti-is-devenv-01 dba-freenas
-
-
-
-
-
-
-
 
 #Using credentials
 #-------------------------------------------------------------------------------------------------------
