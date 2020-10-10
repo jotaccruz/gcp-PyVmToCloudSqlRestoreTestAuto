@@ -50,26 +50,7 @@ config = {
     'ssl_key': SSL_PATH + '\client-key.pem',
 }
 
-#config2 = {
-#    'user': DB_USER,
-#    'password': DB_USER_PASSWORD,
-#    'host': DB_HOST,
-#}
-
 try:
-    #cnx0 = mysql.connector.connect(**config2,
-    #                          auth_plugin='mysql_native_password')
-    #cur0 = cnx0.cursor()
-    #cur0.execute("select SCHEMA_NAME from information_schema.SCHEMATA l where l.SCHEMA_NAME not in ('sys','mysql','information_schema','performance_schema');")
-    #db0 = cur0.fetchall()
-    #for row2del in db0:
-    #    delcmd = "DROP SCHEMA " + row2del[0] + ";"
-    #    curd = cnx0.cursor()
-    #    curd.execute(delcmd)
-    #    cnx0.commit()
-    #cur0.close()
-    #cnx0.close()
-
     cloudsql = build('sqladmin','v1beta4')
     sqlinstance_name = 'loveit'
     project = "ti-is-devenv-01"
@@ -93,7 +74,7 @@ try:
     print(instances['email'])
     print(instances['ip'])
 
-    add_bucket_iam_member(BUCKET_GCS,"roles/storage.object.admin","serviceAccount:" + instances['email'])
+    add_bucket_iam_member(BUCKET_GCS,"roles/storage.admin","serviceAccount:" + instances['email'])
 
     if wait:
         input()
@@ -103,7 +84,6 @@ try:
     cur.execute("SELECT srv_name, srv_ip, srv_user, srv_pwd, srv_directory, srv_os, srv_frecuency, srv_domain FROM lgm_servers where srv_active = 1 and srv_type = 'MSSQL'")
     dbs = cur.fetchall()
     for rowdb in dbs:
-        #print rowdb[0]
         logcmd = "select lbl_id, lbl_date, lbl_server, lbl_filename, "
         logcmd += "SUBSTRING(lbl_filename, INSTR(lbl_filename,'_')+1, \
         (LENGTH(SUBSTRING(lbl_filename, INSTR(lbl_filename,'_')+1))-\
